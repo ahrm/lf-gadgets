@@ -10,6 +10,8 @@ preview() {
 	EOF
 }
 
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
 file="$1"; shift
 case "$(basename "$file" | tr '[:upper:]' '[:lower:]')" in
 *.tar*) tar tf "$file" ;;
@@ -18,7 +20,8 @@ case "$(basename "$file" | tr '[:upper:]' '[:lower:]')" in
 *.7z) 7z l "$file" ;;
 *.avi|*.mp4|*.mkv)
 	thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-	ffmpeg -y -i "$file" -vframes 1 "$thumbnail"
+	#ffmpeg -y -i "$file" -vframes 1 "$thumbnail"
+	python3 "$SCRIPTPATH/quick-thumbnail.py" "$file" "$thumbnail"
 	preview "$thumbnail" "$@"
 	;;
 *.pdf)
